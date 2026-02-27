@@ -1,0 +1,65 @@
+# =========================
+# Python / Django
+# =========================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*
+
+# Django stuff
+# *.log
+db.sqlite3
+media/
+staticfiles/
+
+# Migrations (optional - keep if required)
+# apps/*/migrations/*
+# !apps/*/migrations/__init__.py
+
+# Pytest / coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# =========================
+# Node / React
+# =========================
+
+node_modules/
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vite
+.vite/
+
+# =========================
+# OS Files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Misc
+# =========================
+
+*.swp
+*.swo

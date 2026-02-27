@@ -3,6 +3,9 @@ from ninja_jwt.authentication import JWTAuth
 from django.shortcuts import get_object_or_404
 from .models import Task
 from .schema import TaskIn, TaskOut
+import logging
+
+logger = logging.getLogger("apps")
 
 router = Router(tags=["Tasks"], auth=JWTAuth())
 
@@ -19,6 +22,7 @@ def create_task(request, payload: TaskIn):
         **payload.dict(),
         owner=request.user
     )
+    logger.info(f"Task created by user {request.user.username}")
     return task
 
 @router.put("/{task_id}", response=TaskOut)
@@ -26,12 +30,14 @@ def update_task(request, task_id: int, payload: TaskIn):
     task = get_object_or_404(Task, id=task_id)
 
     if request.user.role != "admin" and task.owner != request.user:
+        logger.warning(f"User {request.user.username} tried to update task {task_id} without permission.")
         return {"error": "Unauthorized"}
 
     for attr, value in payload.dict().items():
         setattr(task, attr, value)
 
     task.save()
+    logger.info(f"Task {task_id} updated by user {request.user.username}")
     return task
 
 @router.delete("/{task_id}")
@@ -39,7 +45,9 @@ def delete_task(request, task_id: int):
     task = get_object_or_404(Task, id=task_id)
 
     if request.user.role != "admin" and task.owner != request.user:
+        logger.warning(f"User {request.user.username} tried to delete task {task_id} without permission.")
         return {"error": "Unauthorized"}
 
     task.delete()
+    logger.info(f"Task {task_id} deleted by user {request.user.username}")
     return {"message": "Deleted successfully"}

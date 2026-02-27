@@ -3,12 +3,15 @@ from django.contrib.auth import authenticate
 from ninja_jwt.tokens import RefreshToken
 from .models import User
 from .schema import RegisterSchema, LoginSchema
+import logging
+logger = logging.getLogger("apps")
 
 router = Router(tags=["Auth"])
 
 @router.post("/register")
 def register(request, payload: RegisterSchema):
     if User.objects.filter(username=payload.username).exists():
+        logger.warning(f"Username {payload.username} already exists")
         return {"error": "Username already exists"}
 
     user = User.objects.create_user(
@@ -17,15 +20,18 @@ def register(request, payload: RegisterSchema):
         password=payload.password,
         role=payload.role
     )
+    logger.info(f"New user registered: {user.username} with role {user.role}")
     return {"message": "User created successfully"}
 
 @router.post("/login")
 def login(request, payload: LoginSchema):
     user = authenticate(username=payload.username, password=payload.password)
     if not user:
+        logger.warning(f"Failed login attempt for username: {payload.username}")
         return {"error": "Invalid credentials"}
 
     refresh = RefreshToken.for_user(user)
+    logger.info(f"User {user.username} logged in successfully")
     return {
         "access": str(refresh.access_token),
         "refresh": str(refresh),
