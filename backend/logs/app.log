@@ -27,3 +27,4 @@
 [2026-02-27 18:30:49,114] WARNING django.request: Unauthorized: /api/v1/tasks/
 [2026-02-27 18:30:49,117] WARNING django.server: "GET /api/v1/tasks/ HTTP/1.1" 401 26
 [2026-02-27 18:45:34,720] INFO django.utils.autoreload: D:\VC\Another GitHub\backend-task\backend\config\settings.py changed, reloading.
+[2026-02-27 18:45:39,622] INFO django.utils.autoreload: Watching for file changes with StatReloader
